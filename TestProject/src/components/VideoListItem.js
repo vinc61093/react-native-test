@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Video from 'react-native-video';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Share } from 'react-native';
 import { Card } from './common/Card';
 import { CardSection } from './common/CardSection';
+import { Button } from './common/Button';
 import * as actions from '../actions';
 
+// const shareOptions = {
+//   title: 'Title',
+//   message: 'Message to share',
+//   url: 'www.example.com',
+//   subject: 'Subject'
+// };
 
 class VideoListItem extends Component {
 
@@ -25,6 +32,15 @@ class VideoListItem extends Component {
 		}
 	}
 
+ shareOptions = {
+		title: 'Title',
+		message: 'Message to share',
+		url: this.props.video.item.video_url,
+		subject: 'Subject'
+	};
+
+	onSharePress = () => Share.share(this.shareOptions);
+
 	render() {
 	const { title, thumbnail_url, video_url, id } = this.props.video.item;
 	const { headerContentStyle, headerTextStyle, imageStyle } = styles;
@@ -43,9 +59,16 @@ class VideoListItem extends Component {
 						source={{ uri: thumbnail_url }}
 					/>
 				</CardSection>
+
 				<View style={styles.videoContainer}>
 				{this.renderVideo()}
 				</View>
+
+				<CardSection>
+					<Button onPress={this.onSharePress}>
+						Share
+					</Button>
+				</CardSection>
 			</Card>
 			</TouchableOpacity>
 		);
